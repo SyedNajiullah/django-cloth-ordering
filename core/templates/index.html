@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-image-container">
+        <img src="{% static 'img/landing_hero.jpg' %}" alt="Luxury Shopping" class="hero-img">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>EVERY STYLISH MAN'S DREAM</h1>
+                <p>Bringing Neapolitan Sartorial Excellence to your Doorstep.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">SHOP CLOTHING</a>
+                    <a href="#" class="btn btn-secondary">SHOP SHOES</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mission-vision section">
+    <div class="container">
+        <div class="grid-2">
+            <div class="mission-text">
+                <h2>OUR MISSION</h2>
+                <p>At 2Men, our mission is to redefine luxury fashion by bringing the absolute best Italian brands and
+                    products together under one roof. We aim to provide those who want to shop at the highest level a
+                    secure place to view, choose, and buy with absolute confidence.</p>
+            </div>
+            <div class="vision-text">
+                <h2>OUR VISION</h2>
+                <p>To be the world's leading destination for high-end Neapolitan style, recognized globally for the
+                    quality of our handmade products and our dedication to the art of sartorial luxury.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features section bg-light">
+    <div class="container grid-3">
+        <div class="feature-card">
+            <i class="fas fa-gem"></i>
+            <h3>MADE IN ITALY</h3>
+            <p>Quality recognized all over the world, exported directly from the heart of Italy.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-shipping-fast"></i>
+            <h3>EXPRESS SHIPPING</h3>
+            <p>Shipping is incredibly quick, and free on all orders over €300.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-undo"></i>
+            <h3>EASY RETURNS</h3>
+            <p>Hassle-free return policy. Join the 2Men family with absolute peace of mind.</p>
+        </div>
+    </div>
+</section>
+
+<section class="legacy section text-center">
+    <div class="container container-narrow">
+        <h2>OVER 3 DECADES IN THE BUSINESS</h2>
+        <p>2Men is the definition of luxury Italian fashion. With thirty years of experience in the luxury clothing
+            industry, we have built relationships with the world's most prestigious designers to bring you a curated
+            selection of excellence.</p>
+        <a href="#" class="btn btn-outline">MEET THE TEAM</a>
+    </div>
+</section>
+{% endblock %}
