@@ -1,0 +1,57 @@
+/* About Page */
+.mb-60 {
+    margin-bottom: 60px;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.team-section {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    margin-bottom: 80px;
+}
+
+.team-section.reverse {
+    flex-direction: row-reverse;
+}
+
+.team-image {
+    flex: 1;
+}
+
+.team-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.team-info {
+    flex: 1;
+}
+
+.team-info h2 {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.team-info h3 {
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+
+    .team-section,
+    .team-section.reverse {
+        flex-direction: column;
+        gap: 30px;
+    }
+}

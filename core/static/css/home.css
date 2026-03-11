@@ -1,0 +1,101 @@
+/* Hero */
+.hero {
+    position: relative;
+    height: 90vh;
+    overflow: hidden;
+}
+
+.hero-image-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: fadeInUp 1s ease;
+}
+
+.hero-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    animation: fadeInUp 1.2s ease;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    animation: fadeInUp 1.4s ease;
+}
+
+/* Feature Cards */
+.feature-card {
+    text-align: center;
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card i {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+}
+
+.feature-card h3 {
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+}
+
+.feature-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Mission/Vision */
+.mission-vision h2 {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mission-vision h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--accent-color);
+}

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
 {% block content %}
 <section class="page-header section text-center">
     <div class="container">
@@ -19,8 +23,7 @@
             <!-- Section 1 -->
             <div class="team-section alternating">
                 <div class="team-image">
-                    <img src="https://2men.it/cdn/shop/files/Andrea_Tarantino_2Men_It.jpg?v=1686733644&width=1500"
-                        alt="Andrea Tarantino">
+                    <img src="{% static 'img/andrea_tarantino.png' %}" alt="Andrea Tarantino">
                 </div>
                 <div class="team-info">
                     <h2>ANDREA TARANTINO</h2>
@@ -34,8 +37,7 @@
             <!-- Section 2 -->
             <div class="team-section alternating reverse">
                 <div class="team-image">
-                    <img src="https://2men.it/cdn/shop/files/Giuseppe_Mottola_2Men_It.jpg?v=1686733644&width=1500"
-                        alt="Giuseppe Mottola">
+                    <img src="{% static 'img/giuseppe_mottola.png' %}" alt="Giuseppe Mottola">
                 </div>
                 <div class="team-info">
                     <h2>GIUSEPPE MOTTOLA</h2>
@@ -49,7 +51,7 @@
             <!-- Section 3 -->
             <div class="team-section alternating">
                 <div class="team-image">
-                    <img src="https://2men.it/cdn/shop/files/Ciro_2Men_It.jpg?v=1686733644&width=1500" alt="Ciro">
+                    <img src="{% static 'img/ciro_gioiosa.png' %}" alt="Ciro">
                 </div>
                 <div class="team-info">
                     <h2>CIRO</h2>

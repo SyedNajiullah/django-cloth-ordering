@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block content %}
 <section class="hero">
     <div class="hero-image-container">
@@ -62,7 +66,7 @@
         <p>2Men is the definition of luxury Italian fashion. With thirty years of experience in the luxury clothing
             industry, we have built relationships with the world's most prestigious designers to bring you a curated
             selection of excellence.</p>
-        <a href="#" class="btn btn-outline">MEET THE TEAM</a>
+        <a href="{% url 'about' %}" class="btn btn-outline">MEET THE TEAM</a>
     </div>
 </section>
 {% endblock %}
