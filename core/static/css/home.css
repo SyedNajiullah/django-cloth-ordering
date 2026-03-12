@@ -59,17 +59,49 @@
     border: 1px solid var(--border-color);
     background: #fff;
     transition: var(--transition);
+    animation: slideUpEntrance 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+}
+
+.feature-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.feature-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.feature-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes slideUpEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent-color);
+}
+
+.feature-card:hover i {
+    transform: scale(1.1);
+    color: var(--primary-color);
 }
 
 .feature-card i {
     font-size: 40px;
     margin-bottom: 20px;
     color: var(--accent-color);
+    transition: var(--transition);
 }
 
 .feature-card h3 {

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="product-detail-container">
+    <div class="product-gallery animate-fade-in-left">
+        {% with product.images.first as primary_image %}
+        {% if primary_image %}
+        <img src="{{ primary_image.image.url }}" alt="{{ product.name }}" class="main-image">
+        {% else %}
+        <img src="{% static 'img/landing_hero.png' %}" alt="{{ product.name }}" class="main-image">
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="product-info animate-fade-in-right">
+        <h1 class="product-brand">{{ product.brand.name|upper }}</h1>
+        <h2 class="product-name">{{ product.name }}</h2>
+        <p class="product-price">€{{ product.price }}</p>
+        
+        <div class="product-attributes">
+            <div class="attribute">
+                <span class="label">COLOR:</span>
+                <span class="value">{{ product.color }}</span>
+            </div>
+            
+            <div class="attribute">
+                <span class="label">SIZE:</span>
+                <select name="size" id="size-select" class="size-dropdown">
+                    {% for size in product.sizes.all %}
+                    <option value="{{ size.size }}">{{ size.size }} {% if size.stock <= 5 %}(Low Stock: {{ size.stock }}){% endif %}</option>
+                    {% empty %}
+                    <option disabled>Out of Stock</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="attribute">
+                <span class="label">QUANTITY:</span>
+                <div class="quantity-selector">
+                    <button type="button" class="qty-btn minus">-</button>
+                    <input type="number" value="1" min="1" class="qty-input">
+                    <button type="button" class="qty-btn plus">+</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="add-to-cart-btn animate-pulse">ADD TO CART</button>
+        
+        <div class="product-description">
+            <h3>DESCRIPTION</h3>
+            <p>{{ product.description }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

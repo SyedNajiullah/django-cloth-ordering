@@ -1,0 +1,141 @@
+.list-header {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.list-header h1 {
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb {
+    font-size: 0.8rem;
+    letter-spacing: 0.1rem;
+    color: #888;
+}
+
+.breadcrumb a {
+    color: #888;
+    text-decoration: none;
+}
+
+.breadcrumb span {
+    color: #1a1a1a;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 3rem 2rem;
+    padding-bottom: 5rem;
+}
+
+.product-card {
+    text-decoration: none;
+    color: inherit;
+    opacity: 0; /* for animation */
+}
+
+.product-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    margin-bottom: 1.5rem;
+    background: #f9f9f9;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-overlay span {
+    color: white;
+    border: 1px solid white;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1rem;
+    background: rgba(0,0,0,0.2);
+}
+
+.product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.product-info {
+    text-align: center;
+}
+
+.product-info .brand {
+    font-size: 0.7rem;
+    letter-spacing: 0.1rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+
+.product-info .name {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.product-info .price {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1.2s ease-out forwards;
+}
+
+.animate-staggered {
+    --i: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem 1rem;
+    }
+}

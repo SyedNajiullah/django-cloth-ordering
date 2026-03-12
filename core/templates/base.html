@@ -27,15 +27,31 @@
             <div class="container navbar-container">
                 <div class="nav-links left">
                     <a href="{% url 'home' %}">HOME</a>
-                    <a href="#">BRANDS</a>
-                    <a href="#">CLOTHING</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn">BRANDS</a>
+                        <div class="dropdown-content">
+                            <a href="{% url 'brand_products' 'barba napoli' %}">BARBA NAPOLI</a>
+                            <a href="{% url 'brand_products' 'Brunello Cucinelli' %}">BRUNELLO CUCINELLI</a>
+                            <a href="{% url 'brand_products' 'Isaia' %}">ISAIA</a>
+                            <a href="{% url 'brand_products' 'premiata' %}">PREMIATA</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn">CLOTHING</a>
+                        <div class="dropdown-content">
+                            <a href="{% url 'category_products' 'Shirts' %}">SHIRTS</a>
+                            <a href="{% url 'category_products' 'Suits' %}">SUITS</a>
+                            <a href="{% url 'category_products' 'Pants' %}">PANTS</a>
+                            <a href="{% url 'category_products' 'Shoes' %}">SHOES</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="logo">
                     <a href="{% url 'home' %}">2MEN</a>
                 </div>
                 <div class="nav-links right">
-                    <a href="#">SHOES</a>
-                    <a href="#">ACCESSORIES</a>
+                    <a href="{% url 'about' %}">ABOUT US</a>
+                    <a href="{% url 'contact' %}">CONTACT</a>
                     <div class="nav-icons">
                         <a href="#"><i class="fas fa-shopping-cart"></i></a>
                     </div>

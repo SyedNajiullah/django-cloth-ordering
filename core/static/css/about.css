@@ -13,6 +13,31 @@
     align-items: center;
     gap: 60px;
     margin-bottom: 80px;
+    animation: slideUpEntrance 1s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+}
+
+.team-section:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.team-section:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.team-section:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes slideUpEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .team-section.reverse {
@@ -21,12 +46,18 @@
 
 .team-image {
     flex: 1;
+    overflow: hidden;
 }
 
 .team-image img {
     width: 100%;
     height: auto;
     display: block;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.team-section:hover .team-image img {
+    transform: scale(1.05);
 }
 
 .team-info {

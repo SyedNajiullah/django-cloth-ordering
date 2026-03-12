@@ -35,8 +35,14 @@ class Product(models.Model):
 
 class ProductSize(models.Model):
     """Available sizes for a product with stock count"""
+    SIZE_CHOICES = [
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+        ('XL', 'Extra Large'),
+    ]
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sizes')# Which product this size belongs to
-    size = models.CharField(max_length=20)# The size value e.g. "48", "50", "M", "L", "42 EU"
+    size = models.CharField(max_length=20, choices=SIZE_CHOICES)# Restricted to S, M, L, XL
     stock = models.PositiveIntegerField(default=0)# How many units are available for this size
     def __str__(self):
         return f"{self.product.name} - {self.size}"

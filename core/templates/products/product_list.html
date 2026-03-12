@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="list-header animate-fade-in">
+        <h1>{{ title|upper }}</h1>
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">HOME</a> / <span>{{ title|upper }}</span>
+        </div>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card animate-staggered" style="--i: {{ forloop.counter0 }};">
+            <a href="{% url 'product_detail' product.pk %}">
+                <div class="product-image">
+                    {% with product.images.first as primary_image %}
+                    {% if primary_image %}
+                    <img src="{{ primary_image.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                    <img src="{% static 'img/landing_hero.png' %}" alt="{{ product.name }}">
+                    {% endif %}
+                    {% endwith %}
+                    <div class="product-overlay">
+                        <span>VIEW DETAILS</span>
+                    </div>
+                </div>
+            </a>
+            <div class="product-info">
+                <p class="brand">{{ product.brand.name|upper }}</p>
+                <h3 class="name">{{ product.name }}</h3>
+                <p class="price">€{{ product.price }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>No products found in this category.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
