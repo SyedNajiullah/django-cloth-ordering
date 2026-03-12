@@ -10,13 +10,26 @@ def product_detail(request, pk):
     return render(request, 'products/product_detail.html', {'product': product})
 
 def brand_products(request, brand_name):
-    brand = get_object_or_404(Brand, name__iexact=brand_name)
-    products = Product.objects.filter(brand=brand)
-    return render(request, 'products/product_list.html', {'products': products, 'title': brand.name})
+    brands = Brand.objects.filter(name__iexact=brand_name)
+    if not brands.exists():
+        from django.http import Http404
+        raise Http404("No Brand matches the given query.")
+    products = Product.objects.filter(brand__in=brands)
+    return render(request, 'products/product_list.html', {'products': products, 'title': brands.first().name})
 
 def category_products(request, category_name):
     category = get_object_or_404(Category, name__iexact=category_name)
-    products = Product.objects.filter(category=category)
+    
+    # Get the category itself and all its subcategories (recursively)
+    def get_all_subcategories(cat):
+        subcats = list(Category.objects.filter(parent=cat))
+        all_cats = [cat]
+        for subcat in subcats:
+            all_cats.extend(get_all_subcategories(subcat))
+        return all_cats
+
+    all_categories = get_all_subcategories(category)
+    products = Product.objects.filter(category__in=all_categories)
     return render(request, 'products/product_list.html', {'products': products, 'title': category.name})
 
 def about(request):
