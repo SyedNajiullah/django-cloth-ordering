@@ -30,6 +30,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('privacy/', views.privacy, name='privacy'),
     path('refund/', views.refund, name='refund'),
+    path('shop/', views.all_products, name='all_products'),
 ]
 
 if settings.DEBUG:

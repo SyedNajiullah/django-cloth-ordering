@@ -15,8 +15,7 @@
                 <h1>EVERY STYLISH MAN'S DREAM</h1>
                 <p>Bringing Neapolitan Sartorial Excellence to your Doorstep.</p>
                 <div class="hero-buttons">
-                    <a href="#" class="btn btn-primary">SHOP CLOTHING</a>
-                    <a href="#" class="btn btn-secondary">SHOP SHOES</a>
+                    <a href="{% url 'all_products' %}" class="btn btn-primary">SHOP</a>
                 </div>
             </div>
         </div>
@@ -89,8 +88,6 @@
             </div>
             {% endfor %}
         </div>
-        <div class="text-center" style="margin-top: 3rem;">
-            <a href="{% url 'category_products' 'Clothing' %}" class="btn btn-outline">VIEW ALL PRODUCTS</a>
         </div>
     </div>
 </section>

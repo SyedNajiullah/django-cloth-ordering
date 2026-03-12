@@ -43,3 +43,7 @@ def privacy(request):
 
 def refund(request):
     return render(request, 'refund.html')
+
+def all_products(request):
+    products = Product.objects.all()
+    return render(request, 'products/product_list.html', {'products': products, 'title': 'ALL PRODUCTS'})
