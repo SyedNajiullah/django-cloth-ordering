@@ -111,6 +111,10 @@ body {
     color: var(--accent-color);
 }
 
+.top-bar i {
+    color: var(--accent-color);
+}
+
 .navbar {
     padding: 20px 0;
 }
@@ -185,6 +189,13 @@ body {
 .nav-icons i {
     font-size: 18px;
     cursor: pointer;
+    color: var(--accent-color);
+    transition: var(--transition);
+}
+
+.nav-icons i:hover {
+    transform: scale(1.1);
+    color: var(--primary-color);
 }
 
 /* Dropdown Menu */
@@ -279,8 +290,9 @@ body {
 }
 
 .btn-outline:hover {
-    background: var(--primary-color);
-    color: #fff;
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #000;
 }
 
 
@@ -332,6 +344,14 @@ body {
 }
 
 .footer-section ul li a:hover {
+    color: var(--accent-color);
+}
+
+.footer-section .social-links a {
+    color: var(--accent-color);
+}
+
+.footer-section .social-links a:hover {
     color: #fff;
 }
 

@@ -36,6 +36,11 @@
     font-size: 64px;
     margin-bottom: 20px;
     animation: fadeInUp 1s ease;
+    letter-spacing: 4px;
+}
+
+.hero-content h1 span {
+    color: var(--accent-color);
 }
 
 .hero-content p {
