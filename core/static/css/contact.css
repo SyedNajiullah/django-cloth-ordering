@@ -74,3 +74,11 @@
 .btn-full {
     width: 100%;
 }
+
+.form-message {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: none;
+}

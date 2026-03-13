@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
 import json
 from .models import Product, Brand, Category, Cart, CartItem
 
@@ -38,6 +40,41 @@ def about(request):
     return render(request, 'about.html')
 
 def contact(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            name = data.get('name', '').strip()
+            email = data.get('email', '').strip()
+            message = data.get('message', '').strip()
+            
+            if not all([name, email, message]):
+                return JsonResponse({
+                    'success': False,
+                    'message': 'All fields are required.'
+                })
+            
+            # Send email
+            subject = f'New Contact Form Submission from {name}'
+            email_body = f'Name: {name}\nEmail: {email}\n\nMessage:\n{message}'
+            
+            send_mail(
+                subject=subject,
+                message=email_body,
+                from_email=email,  # From the person submitting the form
+                recipient_list=[settings.CONTACT_EMAIL],
+                fail_silently=False,
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Thank you! Your message has been sent successfully.'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Error sending message: {str(e)}'
+            })
+    
     return render(request, 'contact.html')
 
 def privacy(request):

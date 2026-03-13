@@ -112,3 +112,20 @@ if not DEBUG:
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'yajra.table@gmail.com'  # Your Gmail address
+EMAIL_HOST_PASSWORD = 'jmed rqbd rbch ayfo'  # See instructions below
+CONTACT_EMAIL = 'yajra.table@gmail.com'
+
+# Gmail App-Specific Password Instructions:
+# 1. Go to https://myaccount.google.com/
+# 2. Click "Security" in the left menu
+# 3. Enable "2-Step Verification" if not already enabled
+# 4. Search for "App passwords" in the search bar
+# 5. Select "Mail" and "Windows Computer"
+# 6. Copy the 16-character password and paste it in EMAIL_HOST_PASSWORD above
