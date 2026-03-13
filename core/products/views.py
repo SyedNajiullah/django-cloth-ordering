@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.conf import settings
 import json
 from .models import Product, Brand, Category, Cart, CartItem
@@ -53,17 +53,18 @@ def contact(request):
                     'message': 'All fields are required.'
                 })
             
-            # Send email
-            subject = f'New Contact Form Submission from {name}'
-            email_body = f'Name: {name}\nEmail: {email}\n\nMessage:\n{message}'
+            # Create email message
+            subject = f'Contact Form Submission from {name}'
+            email_body = f'Name: {name}\nfrom: {email}\n\nMessage:\n{message}'
             
-            send_mail(
+            email_message = EmailMessage(
                 subject=subject,
-                message=email_body,
+                body=email_body,
                 from_email=email,  # From the person submitting the form
-                recipient_list=[settings.CONTACT_EMAIL],
-                fail_silently=False,
+                to=[settings.CONTACT_EMAIL],
             )
+            
+            email_message.send(fail_silently=False)
             
             return JsonResponse({
                 'success': True,
