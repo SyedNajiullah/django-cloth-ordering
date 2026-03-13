@@ -27,8 +27,14 @@
                     {% endwith %}
                     
                     <div class="cart-item-details">
-                        <div class="cart-item-brand">{{ item.product.brand.name }}</div>
-                        <div class="cart-item-name">{{ item.product.name }}</div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <div class="cart-item-brand">{{ item.product.brand.name }}</div>
+                                <div class="cart-item-name">{{ item.product.name }}</div>
+                                <div style="font-size: 0.9rem; color: #555; margin-bottom: 5px;">Size: {{ item.size }}</div>
+                            </div>
+                            <a href="{% url 'remove_from_cart' item.id %}" style="color: #999; text-decoration: none;" title="Remove item"><i class="fas fa-times"></i></a>
+                        </div>
                         <div class="cart-item-price">€{{ item.product.price }}</div>
                         <div class="cart-item-quantity">
                             <span style="font-size: 0.9rem; color: #666;">Quantity:</span>

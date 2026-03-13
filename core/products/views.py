@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+import json
 from .models import Product, Brand, Category, Cart, CartItem
 
 def home(request):
@@ -58,23 +60,75 @@ def cart_view(request):
     return render(request, 'cart.html', {'cart': cart})
 
 def add_to_cart(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.create()
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            size = data.get('size', 'M')
+            try:
+                quantity = int(data.get('quantity', 1))
+            except ValueError:
+                quantity = 1
+        except json.JSONDecodeError:
+            size = 'M'
+            quantity = 1
+            
+        product = get_object_or_404(Product, pk=pk)
         session_key = request.session.session_key
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
+            
+        cart, created = Cart.objects.get_or_create(session_key=session_key)
         
-    cart, created = Cart.objects.get_or_create(session_key=session_key)
-    
-    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not item_created:
-        cart_item.quantity += 1
-        cart_item.save()
+        # Look for existing item with SAME size
+        cart_item, item_created = CartItem.objects.get_or_create(
+            cart=cart, 
+            product=product,
+            size=size
+        )
         
+        if not item_created:
+            cart_item.quantity += quantity
+            cart_item.save()
+        else:
+            if quantity > 1:
+                cart_item.quantity = quantity
+                cart_item.save()
+            
+        # Recalculate total items
+        total_items = sum(item.quantity for item in cart.items.all())
+        return JsonResponse({'success': True, 'cart_item_count': total_items})
+        
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+def remove_from_cart(request, item_id):
+    session_key = request.session.session_key
+    if session_key:
+        try:
+            cart = Cart.objects.get(session_key=session_key)
+            CartItem.objects.filter(id=item_id, cart=cart).delete()
+        except Cart.DoesNotExist:
+            pass
     return redirect('cart_view')
 
 def checkout(request):
     session_key = request.session.session_key
     if session_key:
-        Cart.objects.filter(session_key=session_key).delete()
+        try:
+            cart = Cart.objects.get(session_key=session_key)
+            from .models import ProductSize
+            for item in cart.items.all():
+                try:
+                    product_size = ProductSize.objects.get(product=item.product, size=item.size)
+                    if product_size.stock >= item.quantity:
+                        product_size.stock -= item.quantity
+                    else:
+                        product_size.stock = 0 # Prevent negative stock
+                    product_size.save()
+                except ProductSize.DoesNotExist:
+                    pass # Size was somehow removed from database, safe to ignore for mock checkout
+            # Now delete the cart and content
+            cart.delete()
+        except Cart.DoesNotExist:
+            pass
     return redirect('cart_view')

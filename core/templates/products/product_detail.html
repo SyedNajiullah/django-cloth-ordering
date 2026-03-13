@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <a href="{% url 'add_to_cart' product.pk %}" class="add-to-cart-btn animate-pulse" style="display:block; text-align:center; text-decoration:none;">ADD TO CART</a>
+        <button type="button" id="add-to-cart-btn" class="add-to-cart-btn animate-pulse" data-url="{% url 'add_to_cart' product.pk %}" style="display:block; text-align:center; width: 100%;">ADD TO CART</button>
         
         <div class="product-description">
             <h3>DESCRIPTION</h3>
@@ -57,4 +57,78 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const qtyMinus = document.querySelector('.qty-btn.minus');
+        const qtyPlus = document.querySelector('.qty-btn.plus');
+        const qtyInput = document.querySelector('.qty-input');
+
+        if (qtyMinus && qtyPlus && qtyInput) {
+            qtyMinus.addEventListener('click', () => {
+                let currentVal = parseInt(qtyInput.value);
+                if (currentVal > 1) qtyInput.value = currentVal - 1;
+            });
+            qtyPlus.addEventListener('click', () => {
+                qtyInput.value = parseInt(qtyInput.value) + 1;
+            });
+        }
+
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const url = this.getAttribute('data-url');
+                const sizeSelect = document.getElementById('size-select');
+                const size = sizeSelect ? sizeSelect.value : 'M';
+                const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+                
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'size': size,
+                        'quantity': quantity
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const badgeContainer = document.querySelector('.cart-icon-container');
+                        let badge = badgeContainer.querySelector('.cart-badge');
+                        
+                        // Create badge if it doesn't exist yet
+                        if (!badge) {
+                            badge = document.createElement('span');
+                            badge.className = 'cart-badge';
+                            badgeContainer.appendChild(badge);
+                        }
+                        
+                        badge.style.display = 'inline-block';
+                        badge.textContent = data.cart_item_count;
+                        
+                        // Visual feedback on button
+                        const originalText = addToCartBtn.textContent;
+                        addToCartBtn.textContent = 'ADDED!';
+                        addToCartBtn.style.backgroundColor = '#4caf50';
+                        addToCartBtn.classList.remove('animate-pulse');
+                        
+                        setTimeout(() => {
+                            addToCartBtn.textContent = originalText;
+                            addToCartBtn.style.backgroundColor = ''; // Revert to css color
+                            addToCartBtn.classList.add('animate-pulse');
+                        }, 2000);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
+    });
+</script>
 {% endblock %}

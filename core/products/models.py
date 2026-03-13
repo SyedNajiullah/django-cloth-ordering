@@ -73,6 +73,7 @@ class CartItem(models.Model):
     """Item inside a shopping cart"""
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    size = models.CharField(max_length=20, default='M') # Default added for existing rows
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
