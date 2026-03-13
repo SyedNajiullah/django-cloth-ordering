@@ -82,3 +82,42 @@
     font-size: 14px;
     display: none;
 }
+
+/* Contact Form Button Styling */
+.contact-form .btn-primary {
+    font-family: 'Platino Linotype', Georgia, serif;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+}
+
+.contact-form .btn-primary:disabled,
+.contact-form .btn-primary.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.contact-form .btn-primary.loading {
+    position: relative;
+    color: transparent;
+}
+
+.contact-form .btn-primary.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}

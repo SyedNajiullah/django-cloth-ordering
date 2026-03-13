@@ -74,7 +74,7 @@
                     <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
                 </div>
                 <div id="formMessage" class="form-message"></div>
-                <button type="submit" class="btn btn-primary btn-full">SEND MESSAGE</button>
+                <button type="submit" class="btn btn-primary btn-full" id="submitBtn">SEND US</button>
             </form>
         </div>
     </div>
@@ -90,6 +90,12 @@
         const email = document.getElementById('email').value;
         const message = document.getElementById('message').value;
         const messageDiv = document.getElementById('formMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Disable button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        submitBtn.textContent = 'SENDING...';
         
         // Get CSRF token
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -124,6 +130,12 @@
             messageDiv.style.color = '#dc3545';
             messageDiv.textContent = 'An error occurred. Please try again.';
             console.error('Error:', error);
+        })
+        .finally(() => {
+            // Re-enable button and remove loading state
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+            submitBtn.textContent = 'SEND US';
         });
     });
 </script>
