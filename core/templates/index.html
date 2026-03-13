@@ -70,7 +70,7 @@
                     <div class="product-image">
                         {% with product.images.first as primary_image %}
                         {% if primary_image %}
-                        <img src="{{ primary_image.image.url }}" alt="{{ product.name }}">
+                        <img src="{{ primary_image.image.url }}?v={% now 'U' %}" alt="{{ product.name }}">
                         {% else %}
                         <img src="{% static 'img/landing_hero.png' %}" alt="{{ product.name }}">
                         {% endif %}

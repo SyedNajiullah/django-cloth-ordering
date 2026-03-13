@@ -55,8 +55,7 @@ def cart_view(request):
     if not session_key:
         request.session.create()
         session_key = request.session.session_key
-    
-    cart, created = Cart.objects.get_or_create(session_key=session_key)
+    cart, _ = Cart.objects.get_or_create(session_key=session_key)
     return render(request, 'cart.html', {'cart': cart})
 
 def add_to_cart(request, pk):
@@ -78,8 +77,17 @@ def add_to_cart(request, pk):
             request.session.create()
             session_key = request.session.session_key
             
-        cart, created = Cart.objects.get_or_create(session_key=session_key)
+        cart, _ = Cart.objects.get_or_create(session_key=session_key)
         
+        # Check stock limits
+        from .models import ProductSize
+        try:
+            product_size = ProductSize.objects.get(product=product, size=size)
+            if quantity > product_size.stock:
+                return JsonResponse({'success': False, 'message': 'Not enough stock'})
+        except ProductSize.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Not enough stock'})
+            
         # Look for existing item with SAME size
         cart_item, item_created = CartItem.objects.get_or_create(
             cart=cart, 
@@ -88,12 +96,11 @@ def add_to_cart(request, pk):
         )
         
         if not item_created:
-            cart_item.quantity += quantity
+            return JsonResponse({'success': False, 'message': 'Product already in cart'})
+            
+        if quantity > 1:
+            cart_item.quantity = quantity
             cart_item.save()
-        else:
-            if quantity > 1:
-                cart_item.quantity = quantity
-                cart_item.save()
             
         # Recalculate total items
         total_items = sum(item.quantity for item in cart.items.all())
@@ -116,17 +123,24 @@ def checkout(request):
     if session_key:
         try:
             cart = Cart.objects.get(session_key=session_key)
-            from .models import ProductSize
-            for item in cart.items.all():
+            import os
+            
+            items = list(cart.items.all())
+            for item in items:
                 try:
-                    product_size = ProductSize.objects.get(product=item.product, size=item.size)
-                    if product_size.stock >= item.quantity:
-                        product_size.stock -= item.quantity
-                    else:
-                        product_size.stock = 0 # Prevent negative stock
-                    product_size.save()
-                except ProductSize.DoesNotExist:
-                    pass # Size was somehow removed from database, safe to ignore for mock checkout
+                    product = item.product
+                    # Delete actual image files attached to the product
+                    for product_image in product.images.all():
+                        if product_image.image and os.path.isfile(product_image.image.path):
+                            try:
+                                os.remove(product_image.image.path)
+                            except Exception:
+                                pass # Ignore if file is locked or missing
+                    
+                    # Delete the product record itself, which cascades
+                    product.delete()
+                except Exception:
+                    pass
             # Now delete the cart and content
             cart.delete()
         except Cart.DoesNotExist:

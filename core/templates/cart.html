@@ -20,7 +20,7 @@
                 <div class="cart-item">
                     {% with item.product.images.first as primary_image %}
                     {% if primary_image %}
-                    <img src="{{ primary_image.image.url }}" alt="{{ item.product.name }}" class="cart-item-image">
+                    <img src="{{ primary_image.image.url }}?v={% now 'U' %}" alt="{{ item.product.name }}" class="cart-item-image">
                     {% else %}
                     <img src="{% static 'img/landing_hero.png' %}" alt="{{ item.product.name }}" class="cart-item-image">
                     {% endif %}

@@ -10,7 +10,7 @@
     <div class="product-gallery animate-fade-in-left">
         {% with product.images.first as primary_image %}
         {% if primary_image %}
-        <img src="{{ primary_image.image.url }}" alt="{{ product.name }}" class="main-image">
+        <img src="{{ primary_image.image.url }}?v={% now 'U' %}" alt="{{ product.name }}" class="main-image">
         {% else %}
         <img src="{% static 'img/landing_hero.png' %}" alt="{{ product.name }}" class="main-image">
         {% endif %}
@@ -32,7 +32,7 @@
                 <span class="label">SIZE:</span>
                 <select name="size" id="size-select" class="size-dropdown">
                     {% for size in product.sizes.all %}
-                    <option value="{{ size.size }}">{{ size.size }} {% if size.stock <= 5 %}(Low Stock: {{ size.stock }}){% endif %}</option>
+                    <option value="{{ size.size }}" data-stock="{{ size.stock }}">{{ size.size }} {% if size.stock <= 5 %}(Low Stock: {{ size.stock }}){% endif %}</option>
                     {% empty %}
                     <option disabled>Out of Stock</option>
                     {% endfor %}
@@ -66,14 +66,43 @@
         const qtyPlus = document.querySelector('.qty-btn.plus');
         const qtyInput = document.querySelector('.qty-input');
 
+        const sizeSelect = document.getElementById('size-select');
+
+        function getMaxStock() {
+            if (!sizeSelect) return 99; // Fallback
+            const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+            return selectedOption ? parseInt(selectedOption.getAttribute('data-stock')) : 99;
+        }
+
         if (qtyMinus && qtyPlus && qtyInput) {
             qtyMinus.addEventListener('click', () => {
                 let currentVal = parseInt(qtyInput.value);
                 if (currentVal > 1) qtyInput.value = currentVal - 1;
             });
             qtyPlus.addEventListener('click', () => {
-                qtyInput.value = parseInt(qtyInput.value) + 1;
+                let currentVal = parseInt(qtyInput.value);
+                let maxStock = getMaxStock();
+                if (currentVal < maxStock) {
+                    qtyInput.value = currentVal + 1;
+                }
             });
+            
+            qtyInput.addEventListener('change', () => {
+                let currentVal = parseInt(qtyInput.value);
+                let maxStock = getMaxStock();
+                if (currentVal > maxStock) qtyInput.value = maxStock;
+                if (currentVal < 1) qtyInput.value = 1;
+            });
+            
+            if (sizeSelect) {
+                sizeSelect.addEventListener('change', () => {
+                    let currentVal = parseInt(qtyInput.value);
+                    let maxStock = getMaxStock();
+                    if (currentVal > maxStock) qtyInput.value = maxStock;
+                    if (maxStock === 0) qtyInput.value = 0;
+                    else if (qtyInput.value === '0') qtyInput.value = 1; 
+                });
+            }
         }
 
         const addToCartBtn = document.getElementById('add-to-cart-btn');
@@ -114,9 +143,21 @@
                         badge.textContent = data.cart_item_count;
                         
                         // Visual feedback on button
-                        const originalText = addToCartBtn.textContent;
-                        addToCartBtn.textContent = 'ADDED!';
+                        addToCartBtn.textContent = 'ADDED TO CART';
                         addToCartBtn.style.backgroundColor = '#4caf50';
+                        addToCartBtn.classList.remove('animate-pulse');
+                        addToCartBtn.disabled = true;
+                        addToCartBtn.style.cursor = 'not-allowed';
+                    } else if (data.message === 'Product already in cart') {
+                        addToCartBtn.textContent = 'ALREADY IN CART';
+                        addToCartBtn.style.backgroundColor = '#f44336';
+                        addToCartBtn.classList.remove('animate-pulse');
+                        addToCartBtn.disabled = true;
+                        addToCartBtn.style.cursor = 'not-allowed';
+                    } else if (data.message === 'Not enough stock') {
+                        const originalText = addToCartBtn.textContent;
+                        addToCartBtn.textContent = 'NOT ENOUGH STOCK!';
+                        addToCartBtn.style.backgroundColor = '#f44336';
                         addToCartBtn.classList.remove('animate-pulse');
                         
                         setTimeout(() => {
