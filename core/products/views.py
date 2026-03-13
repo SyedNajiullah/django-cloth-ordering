@@ -123,22 +123,39 @@ def checkout(request):
     if session_key:
         try:
             cart = Cart.objects.get(session_key=session_key)
+            from .models import ProductSize
             import os
             
             items = list(cart.items.all())
             for item in items:
                 try:
                     product = item.product
-                    # Delete actual image files attached to the product
-                    for product_image in product.images.all():
-                        if product_image.image and os.path.isfile(product_image.image.path):
-                            try:
-                                os.remove(product_image.image.path)
-                            except Exception:
-                                pass # Ignore if file is locked or missing
                     
-                    # Delete the product record itself, which cascades
-                    product.delete()
+                    # Decrement the stock for this specific size
+                    try:
+                        product_size = ProductSize.objects.get(product=product, size=item.size)
+                        if product_size.stock >= item.quantity:
+                            product_size.stock -= item.quantity
+                        else:
+                            product_size.stock = 0
+                        product_size.save()
+                    except ProductSize.DoesNotExist:
+                        pass
+                        
+                    # Calculate total remaining stock for all sizes of this product
+                    remaining_stock = sum(s.stock for s in product.sizes.all())
+                    
+                    if remaining_stock <= 0:
+                        # Delete actual image files attached to the product if out of stock
+                        for product_image in product.images.all():
+                            if product_image.image and os.path.isfile(product_image.image.path):
+                                try:
+                                    os.remove(product_image.image.path)
+                                except Exception:
+                                    pass # Ignore if file is locked or missing
+                        
+                        # Delete the product record itself, which cascades
+                        product.delete()
                 except Exception:
                     pass
             # Now delete the cart and content
