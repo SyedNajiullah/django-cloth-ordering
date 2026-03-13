@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Product, Brand, Category
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product, Brand, Category, Cart, CartItem
 
 def home(request):
     products = Product.objects.all()[:8]
@@ -47,3 +47,34 @@ def refund(request):
 def all_products(request):
     products = Product.objects.all()
     return render(request, 'products/product_list.html', {'products': products, 'title': 'ALL PRODUCTS'})
+
+def cart_view(request):
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
+    
+    cart, created = Cart.objects.get_or_create(session_key=session_key)
+    return render(request, 'cart.html', {'cart': cart})
+
+def add_to_cart(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
+        
+    cart, created = Cart.objects.get_or_create(session_key=session_key)
+    
+    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if not item_created:
+        cart_item.quantity += 1
+        cart_item.save()
+        
+    return redirect('cart_view')
+
+def checkout(request):
+    session_key = request.session.session_key
+    if session_key:
+        Cart.objects.filter(session_key=session_key).delete()
+    return redirect('cart_view')

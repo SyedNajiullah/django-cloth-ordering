@@ -55,3 +55,28 @@ class ProductImage(models.Model):
     is_primary = models.BooleanField(default=False)# The main image shown in product listing cards
     def __str__(self):
         return f"Image for {self.product.name}"
+
+
+class Cart(models.Model):
+    """Shopping cart attached to a session"""
+    session_key = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cart {self.id}"
+
+    def get_total_price(self):
+        return sum(item.get_total_price() for item in self.items.all())
+
+
+class CartItem(models.Model):
+    """Item inside a shopping cart"""
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+    def get_total_price(self):
+        return self.product.price * self.quantity

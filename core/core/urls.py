@@ -31,6 +31,9 @@ urlpatterns = [
     path('privacy/', views.privacy, name='privacy'),
     path('refund/', views.refund, name='refund'),
     path('shop/', views.all_products, name='all_products'),
+    path('cart/', views.cart_view, name='cart_view'),
+    path('cart/add/<int:pk>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/checkout/', views.checkout, name='checkout'),
 ]
 
 if settings.DEBUG:

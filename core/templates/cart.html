@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="cart-section">
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1>Your Cart</h1>
+            <a href="{% url 'all_products' %}">Continue shopping</a>
+        </div>
+
+        {% if cart.items.all %}
+        <div class="cart-content">
+            <div class="cart-items">
+                {% for item in cart.items.all %}
+                <div class="cart-item">
+                    {% with item.product.images.first as primary_image %}
+                    {% if primary_image %}
+                    <img src="{{ primary_image.image.url }}" alt="{{ item.product.name }}" class="cart-item-image">
+                    {% else %}
+                    <img src="{% static 'img/landing_hero.png' %}" alt="{{ item.product.name }}" class="cart-item-image">
+                    {% endif %}
+                    {% endwith %}
+                    
+                    <div class="cart-item-details">
+                        <div class="cart-item-brand">{{ item.product.brand.name }}</div>
+                        <div class="cart-item-name">{{ item.product.name }}</div>
+                        <div class="cart-item-price">€{{ item.product.price }}</div>
+                        <div class="cart-item-quantity">
+                            <span style="font-size: 0.9rem; color: #666;">Quantity:</span>
+                            <div class="quantity-controls">
+                                {{ item.quantity }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cart-item-total">
+                        €{{ item.get_total_price }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="cart-summary">
+                <h3 style="margin-bottom: 20px; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>€{{ cart.get_total_price }}</span>
+                </div>
+                <div class="summary-row" style="font-size: 0.9rem;">
+                    <span>Shipping</span>
+                    <span>Calculated at checkout</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>€{{ cart.get_total_price }}</span>
+                </div>
+                <a href="{% url 'checkout' %}" class="btn-checkout">Checkout</a>
+                <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #777;">Taxes included. Discounts applied at checkout.</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-cart">
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added anything to your cart yet.</p>
+            <a href="{% url 'all_products' %}" class="btn-continue">Start Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
