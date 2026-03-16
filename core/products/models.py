@@ -11,7 +11,6 @@ class Brand(models.Model):
 class Category(models.Model):
     """Product category - e.g. Suits, Blazers, Shoes, Accessories"""
     name = models.CharField(max_length=100)# Category name e.g. "Suits", "Sneakers", "Sweaters"
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)# Sub-category support e.g. "Cashmere" belongs to "Sweaters"
     def __str__(self):
         return self.name
 

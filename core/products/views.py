@@ -23,17 +23,7 @@ def brand_products(request, brand_name):
 
 def category_products(request, category_name):
     category = get_object_or_404(Category, name__iexact=category_name)
-    
-    # Get the category itself and all its subcategories (recursively)
-    def get_all_subcategories(cat):
-        subcats = list(Category.objects.filter(parent=cat))
-        all_cats = [cat]
-        for subcat in subcats:
-            all_cats.extend(get_all_subcategories(subcat))
-        return all_cats
-
-    all_categories = get_all_subcategories(category)
-    products = Product.objects.filter(category__in=all_categories)
+    products = Product.objects.filter(category=category)
     return render(request, 'products/product_list.html', {'products': products, 'title': category.name})
 
 def about(request):
