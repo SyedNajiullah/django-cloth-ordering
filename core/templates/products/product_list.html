@@ -19,7 +19,7 @@
         <div class="product-card animate-staggered" style="--i: {{ forloop.counter0 }};">
             <a href="{% url 'product_detail' product.pk %}">
                 <div class="product-image">
-                    {% with product.images.first as primary_image %}
+                    {% with product.get_primary_image as primary_image %}
                     {% if primary_image %}
                     <img src="{{ primary_image.image.url }}?v={% now 'U' %}" alt="{{ product.name }}">
                     {% else %}

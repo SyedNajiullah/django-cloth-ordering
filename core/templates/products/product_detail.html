@@ -8,7 +8,7 @@
 {% block content %}
 <div class="product-detail-container">
     <div class="product-gallery animate-fade-in-left">
-        {% with product.images.first as primary_image %}
+        {% with product.get_primary_image as primary_image %}
         {% if primary_image %}
         <img src="{{ primary_image.image.url }}?v={% now 'U' %}" alt="{{ product.name }}" class="main-image">
         {% else %}

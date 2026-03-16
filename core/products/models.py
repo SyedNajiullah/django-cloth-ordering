@@ -31,6 +31,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_primary_image(self):
+        """Returns the image marked as primary, or the first one available if none are marked."""
+        primary = self.images.filter(is_primary=True).first()
+        if primary:
+            return primary
+        return self.images.first()
+
 
 class ProductSize(models.Model):
     """Available sizes for a product with stock count"""
